@@ -56,6 +56,72 @@ function App() {
       return "อ้วนระดับ 2";
     };
 
+    function ScoreFace6() {
+      return (
+        <>
+          <div className="absolute left-7 w-20 h-7 mt-2 bg-green-200 rounded-bl-full rounded-br-full bg-[#A0A0A0]"></div>
+        </>
+      );
+    }
+
+    function ScoreFace5() {
+      return (
+        <>
+          <div className="absolute left-7 w-20 h-6 mt-2 bg-green-200 rounded-bl-full rounded-br-full bg-[#9CD09C]"></div>
+        </>
+      );
+    }
+
+    function ScoreFace4() {
+      return (
+        <>
+          <div className="absolute left-7 w-20 h-5 mt-2 bg-green-200 rounded-bl-full rounded-br-full bg-[#7E9F6E]"></div>
+        </>
+      );
+    }
+
+    function ScoreFace3() {
+      return (
+        <>
+          <div className="absolute left-7 w-20 h-4 mt-2 bg-green-200 rounded-xl bg-[#E6DDBC]"></div>
+        </>
+      );
+    }
+
+    function ScoreFace2() {
+      return (
+        <>
+          <div className="absolute left-7 w-20 h-5 bg-green-200 rounded-tl-full rounded-tr-full bg-[#E0C0A9]"></div>
+        </>
+      );
+    }
+
+    function ScoreFace1() {
+      return (
+        <>
+          <div className="absolute left-7 w-20 h-6 bg-green-200 rounded-tl-full rounded-tr-full bg-[#CC99A9]"></div>
+        </>
+      );
+    }
+
+    function ScoreFace0() {
+      return (
+        <>
+          <div className="absolute left-7 w-20 h-7 bg-green-200 rounded-tl-full rounded-tr-full bg-[#A0A0A0]"></div>
+        </>
+      );
+    }
+
+    const getFace = () => {
+      if (score < 1) return <ScoreFace0 />;
+      if (score < 2) return <ScoreFace1 />;
+      if (score < 3) return <ScoreFace2 />;
+      if (score < 4) return <ScoreFace3 />;
+      if (score < 5) return <ScoreFace4 />;
+      if (score < 6) return <ScoreFace5 />;
+      return <ScoreFace6 />
+    }
+
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-[#E0F2F7] to-[#C8E6F0] text-center p-4">
         <div className="relative flex items-center justify-center mb-6">
@@ -63,6 +129,15 @@ function App() {
           className={`w-36 h-36 rounded-full border-4 shadow-lg mb-6 ${getBallColor()} border-solid ${getBallBorderColor()} animate-bouncePingpong z-20`}
         >
           {/* Face */}
+          <div className="relative flex mt-6 justify-around m-4">
+            <div className={`w-8 h-10 flex rounded-[50%] bg-[#F8F8FF] border-2 ${getBallBorderColor()}`}>
+              <div className="w-2 h-2 relative rounded-[50%] bg-[#0B0F0F] left-3 top-3"></div>
+            </div>
+            <div className={`w-8 h-10 flex rounded-[50%] bg-[#F8F8FF] border-2 ${getBallBorderColor()}`}>
+              <div className="w-2 h-2 relative rounded-[50%] bg-[#0B0F0F] left-3 top-3"></div>
+            </div>
+          </div>
+          {getFace()}
         </div>
         <div className="absolute top-[85%] w-20 h-6 bg-black rounded-full blur-md opacity-20 animate-shadowSquash z-10" />
         </div>
