@@ -65,7 +65,7 @@ function App() {
     ];
     return (
       <div
-        className={`absolute left-7 w-20 h-[${7 - Math.min(score, 6)}] bg-green-200 rounded-full bg-${faces[Math.min(score, 6)]}`}
+        className={`absolute left-7 w-20 h-[${7 - Math.min(score, 6)}] bg-black-200 rounded-full bg-${faces[Math.min(score, 6)]}`}
       ></div>
     );
   };
