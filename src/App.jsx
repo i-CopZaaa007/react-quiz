@@ -10,16 +10,10 @@ function App() {
 
   const handleAnswer = (choiceIndex) => {
     setAnswers([...answers, choiceIndex]);
-
     if (choiceIndex === 0) {
       setScore(score + 1);
     }
-
-    if (current + 1 < questions.length) {
-      setCurrent(current + 1);
-    } else {
-      setCurrent(-1);
-    }
+    setCurrent(current + 1);
   };
 
   const getBallColor = () => {
@@ -31,6 +25,7 @@ function App() {
     if (score < 6) return "bg-[#C1E1C1]";
     return "bg-[#F8F8F8]";
   };
+
   const getBallBorderColor = () => {
     if (score < 1) return "border-[#A0A0A0]";
     if (score < 2) return "border-[#CC99A9]";
@@ -41,122 +36,74 @@ function App() {
     return "border-[#DCDCDC]";
   };
 
-  if (current === 6) {
+  const getBMI = () => {
     const weightNum = parseFloat(weight);
     const heightNum = parseFloat(height);
     const heightM = heightNum / 100;
     const bmi = weightNum / heightM ** 2;
     const bmiRounded = bmi.toFixed(2);
 
-    const getBMI = () => {
-      if (bmiRounded <= 18.5) return "ต่ำกว่าเกณฑ์";
-      if (bmiRounded <= 22.9) return "ปกติสมส่วน";
-      if (bmiRounded <= 24.9) return "น้ำหนักเกิน";
-      if (bmiRounded <= 29.9) return "อ้วนระดับ 1";
-      return "อ้วนระดับ 2";
-    };
+    let label = "";
+    if (bmiRounded <= 18.5) label = "ต่ำกว่าเกณฑ์";
+    else if (bmiRounded <= 22.9) label = "ปกติสมส่วน";
+    else if (bmiRounded <= 24.9) label = "น้ำหนักเกิน";
+    else if (bmiRounded <= 29.9) label = "อ้วนระดับ 1";
+    else label = "อ้วนระดับ 2";
 
-    function ScoreFace6() {
-      return (
-        <>
-          <div className="absolute left-7 w-20 h-7 mt-2 bg-green-200 rounded-bl-full rounded-br-full bg-[#A0A0A0]"></div>
-        </>
-      );
-    }
+    return { bmiRounded, label };
+  };
 
-    function ScoreFace5() {
-      return (
-        <>
-          <div className="absolute left-7 w-20 h-6 mt-2 bg-green-200 rounded-bl-full rounded-br-full bg-[#9CD09C]"></div>
-        </>
-      );
-    }
+  const getFace = () => {
+    const faces = [
+      "[#A0A0A0]",
+      "[#CC99A9]",
+      "[#E0C0A9]",
+      "[#E6DDBC]",
+      "[#7E9F6E]",
+      "[#9CD09C]",
+      "[#A0A0A0]",
+    ];
+    return (
+      <div
+        className={`absolute left-7 w-20 h-[${7 - Math.min(score, 6)}] bg-green-200 rounded-full bg-${faces[Math.min(score, 6)]}`}
+      ></div>
+    );
+  };
 
-    function ScoreFace4() {
-      return (
-        <>
-          <div className="absolute left-7 w-20 h-5 mt-2 bg-green-200 rounded-bl-full rounded-br-full bg-[#7E9F6E]"></div>
-        </>
-      );
-    }
-
-    function ScoreFace3() {
-      return (
-        <>
-          <div className="absolute left-7 w-20 h-4 mt-2 bg-green-200 rounded-xl bg-[#E6DDBC]"></div>
-        </>
-      );
-    }
-
-    function ScoreFace2() {
-      return (
-        <>
-          <div className="absolute left-7 w-20 h-5 bg-green-200 rounded-tl-full rounded-tr-full bg-[#E0C0A9]"></div>
-        </>
-      );
-    }
-
-    function ScoreFace1() {
-      return (
-        <>
-          <div className="absolute left-7 w-20 h-6 bg-green-200 rounded-tl-full rounded-tr-full bg-[#CC99A9]"></div>
-        </>
-      );
-    }
-
-    function ScoreFace0() {
-      return (
-        <>
-          <div className="absolute left-7 w-20 h-7 bg-green-200 rounded-tl-full rounded-tr-full bg-[#A0A0A0]"></div>
-        </>
-      );
-    }
-
-    const getFace = () => {
-      if (score < 1) return <ScoreFace0 />;
-      if (score < 2) return <ScoreFace1 />;
-      if (score < 3) return <ScoreFace2 />;
-      if (score < 4) return <ScoreFace3 />;
-      if (score < 5) return <ScoreFace4 />;
-      if (score < 6) return <ScoreFace5 />;
-      return <ScoreFace6 />
-    }
-
+  if (current === 6) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-[#E0F2F7] to-[#C8E6F0] text-center p-4">
         <div className="relative flex items-center justify-center mb-6">
-        <div 
-          className={`w-36 h-36 rounded-full border-4 shadow-lg mb-6 ${getBallColor()} border-solid ${getBallBorderColor()} animate-bouncePingpong z-20`}
-        >
-          {/* Face */}
-          <div className="relative flex mt-6 justify-around m-4">
-            <div className={`w-8 h-10 flex rounded-[50%] bg-[#F8F8FF] border-2 ${getBallBorderColor()}`}>
-              <div className="w-2 h-2 relative rounded-[50%] bg-[#0B0F0F] left-3 top-3"></div>
+          <div
+            className={`w-36 h-36 rounded-full border-4 shadow-lg mb-6 ${getBallColor()} border-solid ${getBallBorderColor()} animate-bouncePingpong z-20`}
+          >
+            <div className="relative flex mt-6 justify-around m-4">
+              {[...Array(2)].map((_, i) => (
+                <div
+                  key={i}
+                  className={`w-8 h-10 flex rounded-[50%] bg-[#F8F8FF] border-2 ${getBallBorderColor()}`}
+                >
+                  <div className="w-2 h-2 relative rounded-[50%] bg-[#0B0F0F] left-3 top-4 animate-eyeMove"></div>
+                </div>
+              ))}
             </div>
-            <div className={`w-8 h-10 flex rounded-[50%] bg-[#F8F8FF] border-2 ${getBallBorderColor()}`}>
-              <div className="w-2 h-2 relative rounded-[50%] bg-[#0B0F0F] left-3 top-3"></div>
-            </div>
+            {getFace()}
           </div>
-          {getFace()}
-        </div>
-        <div className="absolute top-[85%] w-20 h-6 bg-black rounded-full blur-md opacity-20 animate-shadowSquash z-10" />
+          <div className="absolute top-[85%] w-20 h-6 bg-black rounded-full blur-md opacity-20 animate-shadowSquash z-10" />
         </div>
         <h1 className="text-3xl font-bold mb-4">Finish!</h1>
         <p className="text-xl mb-4">
-          Score :{" "}
-          <span className="font-semibold">
-            {score} / {questions.length}
-          </span>
+          Score : <span className="font-semibold">{score} / {questions.length}</span>
         </p>
-        <p>
-          BMI : <span>{getBMI()}</span>
-        </p>
+        <p>BMI : <span>{getBMI().label}</span></p>
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4"
           onClick={() => {
             setCurrent(0);
             setAnswers([]);
             setScore(0);
+            setWeight("");
+            setHeight("");
           }}
         >
           Answer again!
@@ -198,13 +145,8 @@ function App() {
                     return;
                   }
 
-                  const weightNum = parseFloat(weight);
-                  const heightNum = parseFloat(height);
-                  const heightM = heightNum / 100;
-                  const bmi = weightNum / heightM ** 2;
-                  const bmiRounded = bmi.toFixed(2);
-
-                  if (bmiRounded <= 22.9) {
+                  const bmi = getBMI();
+                  if (bmi.bmiRounded <= 22.9) {
                     setScore(score + 1);
                   }
 
