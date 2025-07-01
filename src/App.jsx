@@ -53,122 +53,154 @@ function App() {
     return { bmiRounded, label };
   };
 
-  const getFace = () => {
-    const faces = [
-      "[#A0A0A0]",
-      "[#CC99A9]",
-      "[#E0C0A9]",
-      "[#E6DDBC]",
-      "[#7E9F6E]",
-      "[#9CD09C]",
-      "[#A0A0A0]",
-    ];
-    return (
-      <div
-        className={`absolute left-7 w-20 h-[${7 - Math.min(score, 6)}] bg-black-200 rounded-full bg-${faces[Math.min(score, 6)]}`}
-      ></div>
-    );
+  const getPic = () => {
+    if (score < 1) return "black.png";
+    if (score < 2) return "red.png";
+    if (score < 3) return "orange.png";
+    if (score < 4) return "yellow.png";
+    if (score < 5) return "dark_green.png";
+    if (score < 6) return "green.png";
+    return "white.png";
   };
 
   if (current === 6) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-[#E0F2F7] to-[#C8E6F0] text-center p-4">
-        <div className="relative flex items-center justify-center mb-6">
-          <div
-            className={`w-36 h-36 rounded-full border-4 shadow-lg mb-6 ${getBallColor()} border-solid ${getBallBorderColor()} animate-bouncePingpong z-20`}
-          >
-            <div className="relative flex mt-6 justify-around m-4">
-              {[...Array(2)].map((_, i) => (
-                <div
-                  key={i}
-                  className={`w-8 h-10 flex rounded-[50%] bg-[#F8F8FF] border-2 ${getBallBorderColor()}`}
-                >
-                  <div className="w-2 h-2 relative rounded-[50%] bg-[#0B0F0F] left-3 top-4 animate-eyeMove"></div>
-                </div>
-              ))}
-            </div>
-            {getFace()}
-          </div>
-          <div className="absolute top-[85%] w-20 h-6 bg-black rounded-full blur-md opacity-20 animate-shadowSquash z-10" />
-        </div>
-        <h1 className="text-3xl font-bold mb-4">Finish!</h1>
-        <p className="text-xl mb-4">
-          Score : <span className="font-semibold">{score} / {questions.length}</span>
-        </p>
-        <p>BMI : <span>{getBMI().label}</span></p>
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4"
-          onClick={() => {
-            setCurrent(0);
-            setAnswers([]);
-            setScore(0);
-            setWeight("");
-            setHeight("");
-          }}
-        >
-          Answer again!
-        </button>
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-[#E0F2F7] to-[#C8E6F0] text-center p-4 select-none">
+      <div className="fix">
+        <img
+          src="logo.png"
+          alt="Logo"
+          className="absolute top-4 left-4 w-60 h-auto z-50"
+        />
       </div>
-    );
-  }
+
+      <div className="relative flex items-center justify-center mb-6">
+        <img
+          src={getPic()}
+          alt="Ball"
+          className="w-36 h-36 mb-6 animate-bouncePingpong z-20"
+        />
+        <div className="absolute top-[85%] w-20 h-6 bg-black rounded-full blur-md opacity-20 animate-shadowSquash z-10" />
+      </div>
+
+      <h1 className="text-3xl font-bold mb-4">Finish!</h1>
+      <p className="text-xl mb-4">
+        Score :{" "}
+        <span className="font-semibold">
+          {score} / {questions.length}
+        </span>
+      </p>
+      <p>
+        BMI : <span>{getBMI().label}</span>
+      </p>
+      <button
+        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4"
+        onClick={() => {
+          setCurrent(0);
+          setAnswers([]);
+          setScore(0);
+          setWeight("");
+          setHeight("");
+        }}
+      >
+        Answer again!
+      </button>
+    </div>
+  );
+}
+
 
   const q = questions[current];
 
+  const word = () => {
+    if (current == 0) return "อาหาร";
+    if (current == 1) return "ออกกำลังกาย";
+    if (current == 2) return "อารมณ์";
+    if (current == 3) return "ลดบุหรี่";
+    if (current == 4) return "ลดสุรา";
+    if (current == 5) return "ลดอ้วน";
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-[#E0F2F7] to-[#C8E6F0] p-4">
-      <div className="bg-white p-6 rounded-2xl shadow-xl w-full max-w-md">
-        <h2 className="text-xl font-semibold mb-4">
-          ข้อ {current + 1} / {questions.length} :
-        </h2>
-        <p className="text-lg mb-6">{q.question}</p>
-        <div className="space-y-4">
-          {current === 5 ? (
-            <>
-              <input
-                type="number"
-                placeholder="ส่วนสูง (cm)"
-                value={height}
-                onChange={(e) => setHeight(e.target.value)}
-                className="w-full border border-gray-300 rounded px-4 py-2"
-              />
-              <input
-                type="number"
-                placeholder="น้ำหนัก (kg)"
-                value={weight}
-                onChange={(e) => setWeight(e.target.value)}
-                className="w-full border border-gray-300 rounded px-4 py-2"
-              />
-              <button
-                onClick={() => {
-                  if (!weight || !height) {
-                    alert("ใส่น้ำหนักและส่วนสูงก่อน");
-                    return;
-                  }
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-[#E0F2F7] to-[#C8E6F0] p-4 select-none">
+      <div className="fix">
+        <img
+          src="logo.png"
+          alt="Logo"
+          className="absolute top-4 left-4 w-60 h-auto z-50"
+        />
+        <img 
+        src="ball.png" 
+        alt="pic"
+        className="absolute mt-20 top-24 left-14 w-60 h-auto z-50 animate-shakeRotate invisible lg1300:visible" 
+        />
+        <img 
+        src="ball.png" 
+        alt="pic"
+        className="absolute mt-20 top-24 right-14 w-60 h-auto z-50 animate-shakeFlip invisible lg1300:visible" 
+        />
+      </div>
+      <h1 className="text-3xl font-bold mb-6 text-center text-[#333]">
+        {word()}
+      </h1>
+      <div className="flex flex-col items-center justify-center p-4">
+        <div className="w-full max-w-3xl flex justify-end mb-2 mr-4">
+          <h3 className="text-sm text-gray-600">เพ็ญศิริ ทานให้ : 2567</h3>
+        </div>
+        <div className="bg-white p-6 rounded-2xl shadow-xl w-full max-w-3xl">
+          <h2 className="text-xl font-semibold mb-4">
+            ข้อ {current + 1} / {questions.length} :
+          </h2>
+          <p className="text-lg mb-6">{q.question}</p>
+          <div className="space-y-4">
+            {current === 5 ? (
+              <>
+                <input
+                  type="number"
+                  placeholder="ส่วนสูง (cm)"
+                  value={height}
+                  onChange={(e) => setHeight(e.target.value)}
+                  className="w-full border border-gray-300 rounded px-4 py-2"
+                />
+                <input
+                  type="number"
+                  placeholder="น้ำหนัก (kg)"
+                  value={weight}
+                  onChange={(e) => setWeight(e.target.value)}
+                  className="w-full border border-gray-300 rounded px-4 py-2"
+                />
+                <button
+                  onClick={() => {
+                    if (!weight || !height) {
+                      alert("ใส่น้ำหนักและส่วนสูงก่อน");
+                      return;
+                    }
 
-                  const bmi = getBMI();
-                  if (bmi.bmiRounded <= 22.9) {
-                    setScore(score + 1);
-                  }
+                    const bmi = getBMI();
+                    if (bmi.bmiRounded <= 22.9) {
+                      setScore(score + 1);
+                    }
 
-                  setAnswers([...answers, { weight, height }]);
-                  setCurrent(current + 1);
-                }}
-                className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
-              >
-                ยืนยัน
-              </button>
-            </>
-          ) : (
-            q.options.map((opt, idx) => (
-              <button
-                key={idx}
-                onClick={() => handleAnswer(idx)}
-                className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg text-lg"
-              >
-                {opt}
-              </button>
-            ))
-          )}
+                    setAnswers([...answers, { weight, height }]);
+                    setCurrent(current + 1);
+                  }}
+                  className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+                >
+                  ยืนยัน
+                </button>
+              </>
+            ) : (
+              q.options.map((opt, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleAnswer(idx)}
+                  className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg text-lg"
+                >
+                  {opt}
+                </button>
+              ))
+            )}
+          </div>
         </div>
       </div>
     </div>
